@@ -7,7 +7,8 @@ import os
 import getpass
 import time
 from streamlit_autorefresh import st_autorefresh
-from flask import Flask, request
+from flask import Flask
+from flask import request
 
 app = Flask(__name__)
 
