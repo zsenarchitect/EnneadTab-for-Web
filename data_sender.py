@@ -10,7 +10,7 @@ data = {
 
 # Send POST request with JSON data
 response = requests.post('https://zsenarchitect-enneadtab-for-web-enneadtab-webapp-z8q0ab.streamlit.app/data', json=data)
-
+print (response)
 # Check the response status
 if response.status_code == 200:
     print('Data sent successfully!')
