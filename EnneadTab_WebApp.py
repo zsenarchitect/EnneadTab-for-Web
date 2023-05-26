@@ -26,9 +26,12 @@ def main_draft():
     print (user_name)
     st.subheader('Hello {}'.format(user_name))
 
-    user_name = os.getlogin()
-    print (user_name)
-    st.subheader('Hello {}'.format(user_name))
+    try:
+        user_name = os.getlogin()
+        print (user_name)
+        st.subheader('Hello {}'.format(user_name))
+    except Exception as e:
+        st.subheader(e)
 
 
     st.title(time.time())
