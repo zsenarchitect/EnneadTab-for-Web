@@ -9,6 +9,7 @@ import time
 from streamlit_autorefresh import st_autorefresh
 
 def get_local_data():
+    st.subheader(os.path.expanduser("~/Documents"))
     folder = "{}\Documents\EnneadTab Settings\Local Copy Dump".format(os.environ["USERPROFILE"])
     st.subheader(folder)
 
