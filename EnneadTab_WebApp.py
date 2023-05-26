@@ -12,7 +12,7 @@ from flask import request
 
 app = Flask(__name__)
 
-@app.route('/data', methods=['POST'])
+@app.route('/', methods=['POST'])
 def receive_data():
     data = request.json
     print (data)
