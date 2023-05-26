@@ -19,7 +19,8 @@ def receive_data():
     print (data)
     # Process the received data
     st.subheader("Received data:", data)
-    
+      
+    st.text('test done')  
 
 def get_local_data():
     st.subheader(os.path.expanduser("~/Documents"))
@@ -30,18 +31,18 @@ def get_local_data():
 
 def main_draft():
     
-    pace = 10 # refresh every X seconds
-    max_life = 60 * 60 * 1 # 1 hour max life
-    count = st_autorefresh(interval = pace * 1000, 
-                        limit = max_life / pace, key="EA_counter")
+    # pace = 10 # refresh every X seconds
+    # max_life = 60 * 60 * 1 # 1 hour max life
+    # count = st_autorefresh(interval = pace * 1000, 
+    #                     limit = max_life / pace, key="EA_counter")
 
 
     try:
         app.run( )
     except Exception as e:
         st.subheader(e)
-    
-    st.text('test done')
+
+
     # CSS to change the background color
     css = """
         <style>
