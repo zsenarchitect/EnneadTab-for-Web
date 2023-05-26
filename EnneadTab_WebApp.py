@@ -16,10 +16,11 @@ app = Flask(__name__)
 def receive_data():
     data = request.json
     # Process the received data
-    st.write("Received data:", data)
+    st.subheader("Received data:", data)
 
 def get_local_data():
     st.subheader(os.path.expanduser("~/Documents"))
+    return
     folder = "{}\Documents\EnneadTab Settings\Local Copy Dump".format(os.environ["USERPROFILE"])
     st.subheader(folder)
 
@@ -89,7 +90,10 @@ def main_draft():
         
     get_local_data()
     
+    
+    st.text('test get POST')
     app.run( )
+    st.text('test done')
         
         
 if __name__ == '__main__':
