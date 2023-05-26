@@ -9,12 +9,12 @@ data = {
 }
 
 # Send POST request with JSON data
-main_url = "https://zsenarchitect-enneadtab-for-web-enneadtab-webapp-z8q0ab.streamlit.app/data/"
-test_url = "https://zsenarchitect-enneadtab-for-web-data-receiver-wd0la7.streamlit.app/data/"
+main_url = "https://zsenarchitect-enneadtab-for-web-enneadtab-webapp-z8q0ab.streamlit.app/data"
+test_url = "https://zsenarchitect-enneadtab-for-web-data-receiver-wd0la7.streamlit.app/data"
 
-fake_url = "https://zsenarchitect-enneadtab-for23f-web-data-receiver-wd0la7.streamlit.app/data/"
+fake_url = "https://zsenarchitect-enneadtab-for23f-web-data-receiver-wd0la7.streamlit.app/data"
 
-
+print (data)
 response = requests.post(main_url, json=data)
 print (response)
 # Check the response status
