@@ -12,8 +12,9 @@ from flask import request
 
 app = Flask(__name__)
 
-@app.route('/', methods=['POST'])
+@app.route('/data', methods=['POST'])
 def receive_data():
+    st.text(f'test get POST  {time.time()}')
     data = request.json
     print (data)
     # Process the received data
@@ -35,8 +36,9 @@ def main_draft():
                         limit = max_life / pace, key="EA_counter")
 
 
-    st.text(f'test get POST  {time.time()}')
+    
     app.run( )
+    
     st.text('test done')
     # CSS to change the background color
     css = """
