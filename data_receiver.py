@@ -1,7 +1,7 @@
 import streamlit as st
 from flask import Flask, request
 #from streamlit.report_thread import get_report_ctx
-
+import time
 app = Flask(__name__)
 
 @app.route('/data', methods=['POST'])
@@ -15,4 +15,5 @@ def receive_data():
     return 'Data received successfully!'
 
 if __name__ == '__main__':
+    st.write(time.time())
     app.run()
