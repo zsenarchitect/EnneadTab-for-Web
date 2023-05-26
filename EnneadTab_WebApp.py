@@ -36,8 +36,10 @@ def main_draft():
                         limit = max_life / pace, key="EA_counter")
 
 
-    
-    app.run( )
+    try:
+        app.run( )
+    except Exception as e:
+        st.subheader(e)
     
     st.text('test done')
     # CSS to change the background color
