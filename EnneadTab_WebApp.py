@@ -8,9 +8,26 @@ import getpass
 import time
 from streamlit_autorefresh import st_autorefresh
 
+def get_local_data():
+    folder = "{}\Documents\EnneadTab Settings\Local Copy Dump".format(os.environ["USERPROFILE"])
+    st.subheader(folder)
 
 
 def main_draft():
+    # CSS to change the background color
+    css = """
+        <style>
+        body {
+            background-color: #f0f0f0;
+        }
+        </style>
+    """
+
+    # Render the CSS
+    st.markdown(css, unsafe_allow_html=True)
+    
+    
+    
     pace = 2 # refresh every X seconds
     max_life = 60 * 60 * 1 # 1 hour max life
     count = st_autorefresh(interval = pace * 1000, 
@@ -53,11 +70,13 @@ def main_draft():
 
     st.json({'foo':'bar','fu':'ba'})
     st.metric('My metric', 42, 2)### good for showing the diff
-
-    st.image('imgs/logo.png')
+    st.metric('Warning changes:', 100, -32)
+    st.image('imgs/logo.png',use_column_width=True, caption="This App is created by Sen Zhang")
 
     with st.sidebar:
         st.radio('Select one:', [1, 2])
+        
+    get_local_data()
         
         
 if __name__ == '__main__':
