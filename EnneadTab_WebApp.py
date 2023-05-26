@@ -26,6 +26,16 @@ def get_local_data():
 
 
 def main_draft():
+    
+    pace = 2 # refresh every X seconds
+    max_life = 60 * 60 * 1 # 1 hour max life
+    count = st_autorefresh(interval = pace * 1000, 
+                        limit = max_life / pace, key="EA_counter")
+
+
+    st.text('test get POST')
+    app.run( )
+    st.text('test done')
     # CSS to change the background color
     css = """
         <style>
@@ -39,12 +49,6 @@ def main_draft():
     st.markdown(css, unsafe_allow_html=True)
     
     
-    
-    pace = 2 # refresh every X seconds
-    max_life = 60 * 60 * 1 # 1 hour max life
-    count = st_autorefresh(interval = pace * 1000, 
-                        limit = max_life / pace, key="EA_counter")
-
 
     st.title('EnneadTab for Web')
 
@@ -91,9 +95,7 @@ def main_draft():
     get_local_data()
     
     
-    st.text('test get POST')
-    app.run( )
-    st.text('test done')
+
         
         
 if __name__ == '__main__':
