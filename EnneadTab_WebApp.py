@@ -15,8 +15,10 @@ app = Flask(__name__)
 @app.route('/data', methods=['POST'])
 def receive_data():
     data = request.json
+    print (data)
     # Process the received data
     st.subheader("Received data:", data)
+    
 
 def get_local_data():
     st.subheader(os.path.expanduser("~/Documents"))
@@ -27,7 +29,7 @@ def get_local_data():
 
 def main_draft():
     
-    pace = 2 # refresh every X seconds
+    pace = 10 # refresh every X seconds
     max_life = 60 * 60 * 1 # 1 hour max life
     count = st_autorefresh(interval = pace * 1000, 
                         limit = max_life / pace, key="EA_counter")
