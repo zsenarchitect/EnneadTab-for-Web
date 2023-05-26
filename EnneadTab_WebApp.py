@@ -35,7 +35,7 @@ def main_draft():
                         limit = max_life / pace, key="EA_counter")
 
 
-    st.text('test get POSTttttttttttt')
+    st.text(f'test get POST  {time.time()}')
     app.run( )
     st.text('test done')
     # CSS to change the background color
