@@ -7,6 +7,15 @@ import os
 import getpass
 import time
 from streamlit_autorefresh import st_autorefresh
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route('/data', methods=['POST'])
+def receive_data():
+    data = request.json
+    # Process the received data
+    st.write("Received data:", data)
 
 def get_local_data():
     st.subheader(os.path.expanduser("~/Documents"))
@@ -78,6 +87,8 @@ def main_draft():
         st.radio('Select one:', [1, 2])
         
     get_local_data()
+    
+    app.run( )
         
         
 if __name__ == '__main__':
