@@ -16,4 +16,4 @@ def receive_data():
 
 if __name__ == '__main__':
     st.write(time.time())
-    app.run(port= 8000)
+    app.run(port= 8090)
