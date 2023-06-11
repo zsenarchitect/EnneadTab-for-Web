@@ -8,4 +8,3 @@ streamlit
 faiss-cpu==1.7.4
 streamlit-extras
 altair
-dotenv
