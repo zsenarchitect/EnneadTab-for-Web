@@ -2,108 +2,92 @@
 # 
 # python -m streamlit run EnneadTab_WebApp.py
 
-import streamlit as st
 import os
-import getpass
-import time
-from streamlit_autorefresh import st_autorefresh
-from flask import Flask
-from flask import request
+import streamlit as st
+import pickle
+from PyPDF2 import PdfReader
+#from streamlit_extras.add_vertical_space import add_vertical_space
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+from langchain.llms import OpenAI
+from langchain.chains.question_answering import load_qa_chain
+from langchain.callbacks import get_openai_callback
+from dotenv import load_dotenv
+ 
+# Sidebar contents
+with st.sidebar:
+    st.title('🤗💬 EnneadTab GPT')
+    st.markdown('''
+    ## About
+    This app is an LLM-powered chatbot built using:
+    - [OpenAI](https://platform.openai.com/docs/models) LLM model
+ 
+    ''')
+    #add_vertical_space(5)
+    st.write('This is a beta version.')
+ 
+load_dotenv()
+KEY = "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"
 
-app = Flask(__name__)
 
-@app.route('/data', methods=['POST'])
-def receive_data():
-    st.text(f'test get POST  {time.time()}')
-    data = request.json
-    print (data)
-    # Process the received data
-    st.subheader("Received data:", data)
-      
-    st.text('test done')  
+def main():
+    st.header("Chat with QAQC report PDF 💬")
+ 
+ 
+    # upload a PDF file
+    pdf = st.file_uploader("Upload your report PDF", type='pdf')
+ 
+    # st.write(pdf)
+    if pdf is None:
+        return
 
-def get_local_data():
-    st.subheader(os.path.expanduser("~/Documents"))
-    return
-    folder = "{}\Documents\EnneadTab Settings\Local Copy Dump".format(os.environ["USERPROFILE"])
-    st.subheader(folder)
-
-
-def main_draft():
+    pdf_reader = PdfReader(pdf)
     
-    pace = 10 # refresh every X seconds
-    max_life = 60 * 60 * 1 # 1 hour max life
-    count = st_autorefresh(interval = pace * 1000, 
-                        limit = max_life / pace, key="EA_counter")
+    text = ""
+    for page in pdf_reader.pages:
+        text += page.extract_text()
 
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=200,
+        length_function=len
+        )
+    chunks = text_splitter.split_text(text=text)
 
-    # try:
-    #     app.run( )
-    # except Exception as e:
-    #     st.subheader(e)
+    # # embeddings
+    store_name = pdf.name[:-4] # remove .pdf extension
+    st.write(f'{store_name}')
+    # st.write(chunks)
 
+    if os.path.exists(f"{store_name}.pkl"):
+        with open(f"{store_name}.pkl", "rb") as f:
+            VectorStore = pickle.load(f)
+        # st.write('Embeddings Loaded from the Disk')s
+    else:
+        embeddings = OpenAIEmbeddings(openai_api_key = KEY)
+        VectorStore = FAISS.from_texts(chunks, embedding=embeddings)
+        with open(f"{store_name}.pkl", "wb") as f:
+            pickle.dump(VectorStore, f)
 
-    # CSS to change the background color
-    css = """
-        <style>
-        body {
-            background-color: #f0f0f0;
-        }
-        </style>
-    """
+    # embeddings = OpenAIEmbeddings()
+    # VectorStore = FAISS.from_texts(chunks, embedding=embeddings)
 
-    # Render the CSS
-    st.markdown(css, unsafe_allow_html=True)
+    # Accept user questions/query
+    query = st.text_input("Ask questions about your QAQC report file:")
+    # st.write(query)
+
+    if not query:
+        return
     
-    
+    docs = VectorStore.similarity_search(query=query, k=5)
 
-    st.title('EnneadTab for Web')
-
-
-
-
-    user_name = getpass.getuser()
-    print (user_name)
-    st.subheader('Hello {}'.format(user_name))
-
-    try:
-        user_name = os.getlogin()
-        print (user_name)
-        st.subheader('Hello {}'.format(user_name))
-    except Exception as e:
-        st.subheader(e)
-
-
-    st.title(time.time())
-    st.write(max_life/pace - count)
-
-
-    print ("Done!")
-
-    st.text('Fixed width text')
-    st.markdown('_Markdown_') # see *
-    st.latex(r''' e^{i\pi} + 1 = 0 ''')
-    st.write('Most objects') # df, err, func, keras!
-    st.write(['st', 'is <', 3]) # see *
-    st.title('My title')
-    st.header('My header')
-    st.subheader('My sub')
-
-    st.code('for i in range(8): foo()')
-
-    st.json({'foo':'bar','fu':'ba'})
-    st.metric('My metric', 42, 2)### good for showing the diff
-    st.metric('Warning changes:', 100, -32)
-    st.image('imgs/logo.png',use_column_width=True, caption="This App is created by Sen Zhang")
-
-    with st.sidebar:
-        st.radio('Select one:', [1, 2])
-        
-    get_local_data()
-    
-    
-
-        
-        
+    llm = OpenAI(openai_api_key = KEY)
+    chain = load_qa_chain(llm=llm, chain_type="stuff")
+    with get_openai_callback() as cb:
+        response = chain.run(input_documents=docs, question=query)
+        print(cb)
+    st.write(response)
+ 
 if __name__ == '__main__':
-    main_draft()
+    main()
